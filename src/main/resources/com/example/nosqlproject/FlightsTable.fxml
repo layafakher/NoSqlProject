@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+
+<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="563.0" prefWidth="1026.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.nosqlproject.FlightsTableController">
+  <columnConstraints>
+    <ColumnConstraints hgrow="SOMETIMES" maxWidth="145.0" minWidth="0.0" prefWidth="0.0" />
+      <ColumnConstraints hgrow="SOMETIMES" maxWidth="985.59990234375" minWidth="10.0" prefWidth="985.59990234375" />
+    <ColumnConstraints hgrow="SOMETIMES" maxWidth="195.0" minWidth="0.0" prefWidth="0.60009765625" />
+  </columnConstraints>
+  <rowConstraints>
+    <RowConstraints maxHeight="125.4" minHeight="0.0" prefHeight="19.20000114440918" vgrow="SOMETIMES" />
+    <RowConstraints maxHeight="487.199951171875" minHeight="10.0" prefHeight="454.39996337890625" vgrow="SOMETIMES" />
+    <RowConstraints maxHeight="76.40000000000003" minHeight="0.0" prefHeight="68.8000366210938" vgrow="SOMETIMES" />
+  </rowConstraints>
+   <children>
+      <TableView fx:id="flightsTable" prefHeight="461.0" prefWidth="888.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
+        <columns>
+          <TableColumn fx:id="stopsColumn" prefWidth="104.79998397827148" text="توقف ها" />
+          <TableColumn fx:id="airlinesColumn" prefWidth="113.60000610351562" text="شرکت هواپیمایی" />
+            <TableColumn fx:id="priceColumn" prefWidth="72.79998779296875" text="قیمت" />
+            <TableColumn fx:id="capacityColumn" prefWidth="51.20001220703125" text="ظرفیت" />
+            <TableColumn fx:id="finishTimeColumn" prefWidth="90.39996337890625" text="تاریخ رسیدن" />
+            <TableColumn fx:id="startTimeColumn" prefWidth="80.79998779296875" text="تاریخ حرکت" />
+            <TableColumn fx:id="typeColumn" prefWidth="89.60003662109375" text="نوع پرواز" />
+            <TableColumn fx:id="destinationColumn" prefWidth="177.5999755859375" text="مقصد" />
+            <TableColumn fx:id="originColumn" prefWidth="154.4000244140625" text="مبدا" />
+            <TableColumn fx:id="idColumn" prefWidth="48.800048828125" text="ID" />
+        </columns>
+      </TableView>
+   </children>
+</GridPane>
