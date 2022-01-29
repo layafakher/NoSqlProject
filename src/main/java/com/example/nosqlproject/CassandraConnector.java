@@ -24,6 +24,7 @@ public class CassandraConnector {
         session.execute("USE Alibaba;");
     }
 
+    //1
     public List<Flight> getFlightsBySpecificDate(Date date, String classType, OrderBy orderBy){
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         String dateFormatted = formatter.format(date);
@@ -40,6 +41,7 @@ public class CassandraConnector {
         return flights;
     }
 
+    //2
     public List<Flight> getFlightsInPriceRange(double minPrice, double maxPrice, String classType, OrderBy orderBy){
         StringBuilder query = new StringBuilder("SELECT * FROM Flight WHERE price >= " + minPrice + " and price <= " + maxPrice);
         if(classType != null){
@@ -53,6 +55,7 @@ public class CassandraConnector {
         return flights;
     }
 
+    //3
     public void getMinMaxPrice(String origin, String destination, String classType){
         StringBuilder query = new StringBuilder("SELECT min(price) as minPrice ,max(price) as maxPrice FROM Flight WHERE origin = '" + origin + "' and destination = '" + destination + "'");
         if(classType != null){
@@ -64,8 +67,29 @@ public class CassandraConnector {
         System.out.println(result.getDouble("maxPrice"));
     }
 
-    public Flight getCheapestFlight(String origin, String destination, double minPrice, double maxPrice, String classType){
+    //4
+    public void getAvgSumPrice(String origin, String destination, String classType){
+        StringBuilder query = new StringBuilder("SELECT avg(price) as avgPrice ,sum(price) as sumPrice FROM Flight WHERE origin = '" + origin + "' and destination = '" + destination + "'");
+        if(classType != null){
+            query.append(" and classType = '").append(classType).append("'");
+        }
+        query.append(" ALLOW FILTERING; ");
+        Row result = session.execute(query.toString()).one();
+        System.out.println(result.getDouble("avgPrice"));
+        System.out.println(result.getDouble("sumPrice"));
+    }
+
+    //6
+    public Flight getCheapestFlight(String origin, String destination, double minPrice, double maxPrice, Date firstDate, Date secondDate, String classType){
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        String firstDateFormatted = "";
+        String secondDateFormatted = "";
         StringBuilder query = new StringBuilder("SELECT min(price) as minPrice FROM Flight WHERE origin = '" + origin + "' and destination = '" + destination + "' and price >= " + minPrice + " and price <= " + maxPrice);
+        if(firstDate != null && secondDate != null){
+            firstDateFormatted = formatter.format(firstDate);
+            secondDateFormatted = formatter.format(secondDate);
+            query.append(" and startTime >= '").append(firstDateFormatted).append(" 00:00:00' and finishTime <= '").append(secondDateFormatted).append(" 23:59:59"  + "'");
+        }
         if(classType != null){
             query.append(" and classType = '").append(classType).append("'");
         }
@@ -73,12 +97,87 @@ public class CassandraConnector {
         Row result = session.execute(query.toString()).one();
         double minFlightPrice = result.getDouble("minPrice");
         query = new StringBuilder("SELECT * FROM Flight WHERE price = " + minFlightPrice + " and origin = '" + origin + "' and destination = '" + destination + "'");
+        if(firstDate != null && secondDate != null){
+            query.append(" and startTime >= '").append(firstDateFormatted).append(" 00:00:00' and finishTime <= '").append(secondDateFormatted).append(" 23:59:59"  + "'");
+        }
         if(classType != null){
             query.append(" and classType = '").append(classType).append("'");
         }
         query.append(" ALLOW FILTERING; ");
         Row result2 = session.execute(query.toString()).one();
         return parseQuery(result2);
+    }
+
+    //7
+    public List<Flight> getFlightsByOriginDestCap(String originAirport, String DestinationAirport, int FlightCapacity, Date firstDate, Date secondDate, String classType, OrderBy orderBy){
+        StringBuilder query = new StringBuilder("SELECT * FROM Flight WHERE Origin = '" + originAirport +"' and  destination = '" + DestinationAirport + "' and capacity = " + FlightCapacity);
+        if(firstDate != null && secondDate != null){
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+            String firstDateFormatted = formatter.format(firstDate);
+            String secondDateFormatted = formatter.format(secondDate);
+            query.append(" and startTime >= '").append(firstDateFormatted).append(" 00:00:00' and finishTime <= '").append(secondDateFormatted).append(" 23:59:59"  + "'");
+        }
+        if(classType != null){
+            query.append(" and classType = '").append(classType).append("'");
+        }
+        query.append(" ALLOW FILTERING; ");
+        List<Flight> flights = getFlightsByQuery(query.toString());
+        if(orderBy != null){
+            orderFlights(flights,orderBy);
+        }
+        return flights;
+    }
+
+    //9
+    public List<String> getAirlineCompany(Date date, String originAirport, String destinationAirport, OrderBy orderBy){
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        String dateFormatted = formatter.format(date);
+        StringBuilder query = new StringBuilder("SELECT airlineCompany FROM Flight WHERE Origin = '" + originAirport +"' and  startTime >= '" + dateFormatted + " 00:00:00' and startTime <= '" + dateFormatted + " 23:59:59");
+        query.append(" ALLOW FILTERING; ");
+        List<Flight> flights = getFlightsByQuery(query.toString());
+        if(orderBy != null){
+            orderFlights(flights,orderBy);
+        }
+        HashSet<String> airlines = new HashSet<>();
+        for (Flight flight: flights) {
+            List<String> flightAirlines = flight.getAirlineCompany();
+            for (String airline : flightAirlines) {
+                airlines.add(airline);
+            }
+        }
+        return new LinkedList<>(airlines);
+    }
+
+    //10
+    public void deleteByDateName(Date date, String airlineName) {
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        String dateFormatted = formatter.format(date);
+        StringBuilder query = new StringBuilder("DELETE * FROM Flight WHERE airlineCompany = '" + airlineName +"' and  startTime >= '" + dateFormatted + " 00:00:00' and startTime <= '" + dateFormatted + " 23:59:59"  + "'");
+        session.execute(query.toString());
+    }
+
+    //11
+    public void changeCapacityById(int flightId, int capacity){
+        session.execute("UPDATE Flight SET capacity = '" + capacity + "'  WHERE flightId = " + flightId);
+    }
+
+    //12
+    public void changeCapacityByDateOriginDest(String airline, int capacity, Date date, String originAirport, String destinationAirport){
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        String dateFormatted = formatter.format(date);
+        session.execute("UPDATE Flight SET capacity = '" + capacity + "'  WHERE airlineCompany CONTAINS '" + airline + "' and Origin = '" + originAirport + "' and Destination = '" + destinationAirport + "' and startTime >= '" + dateFormatted + " 00:00:00' and startTime <= '" + dateFormatted + " 23:59:59");
+    }
+
+    //13
+    public void airportsName(Date date, String originCountry, String destinationCountry){
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        String dateFormatted = formatter.format(date);
+        ResultSet resultSet = session.execute("SELECT origin,destination FROM Flight WHERE originCountry = '" + originCountry + "' and destinationCountry = '" + destinationCountry + "' and startTime >= '" + dateFormatted + " 00:00:00' and startTime <= '" + dateFormatted + " 23:59:59");
+        List<String> result = new LinkedList<>();
+        for (Row row : resultSet) {
+            System.out.println(row.getString("origin"));
+            System.out.println(row.getString("destination"));
+        }
     }
 
     private List<Flight> getFlightsByQuery(String query){

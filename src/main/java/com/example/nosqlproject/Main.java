@@ -19,6 +19,9 @@ public class Main extends Application {
         stage.setTitle("NoSQL Project");
         stage.setScene(scene);
         stage.show();
+        stage.setOnCloseRequest(windowEvent -> {
+            Info.getInstance().getClient().close();
+        });
         Info.getInstance().setStage(stage);
     }
 
@@ -36,7 +39,7 @@ public class Main extends Application {
 //            e.printStackTrace();
 //        }
 //        client.getMinMaxPrice("Imam airport","Istanbul Airport",null);
-        System.out.println(client.getCheapestFlight("Imam airport","Istanbul Airport",100,500,"economy"));
+        System.out.println(client.getCheapestFlight("Imam airport","Istanbul Airport",100,500,null,null,"economy"));
 //        List<noSQL.Flight> flights = client.getFlightsInPriceRange(100,600);
 
 //        Session session = client.getSession();
