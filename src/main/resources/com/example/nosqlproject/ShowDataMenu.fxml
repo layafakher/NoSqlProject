@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<GridPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="636.0" prefWidth="988.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.nosqlproject.ShowDataMenuController">
+  <columnConstraints>
+      <ColumnConstraints hgrow="SOMETIMES" maxWidth="325.199951171875" minWidth="0.0" prefWidth="0.0" />
+    <ColumnConstraints hgrow="SOMETIMES" maxWidth="959.2" minWidth="10.0" prefWidth="959.2" />
+    <ColumnConstraints hgrow="SOMETIMES" maxWidth="209.199951171875" minWidth="0.0" prefWidth="0.0" />
+  </columnConstraints>
+  <rowConstraints>
+    <RowConstraints maxHeight="35.599996948242186" minHeight="10.0" prefHeight="10.79999198913574" vgrow="SOMETIMES" />
+      <RowConstraints maxHeight="604.8000080108643" minHeight="10.0" prefHeight="233.8" vgrow="SOMETIMES" />
+    <RowConstraints maxHeight="604.8000080108643" minHeight="10.0" prefHeight="303.99999999999994" vgrow="SOMETIMES" />
+    <RowConstraints maxHeight="207.60001220703128" minHeight="0.0" prefHeight="88.79999999999995" vgrow="SOMETIMES" />
+  </rowConstraints>
+   <children>
+      <GridPane GridPane.columnIndex="1" GridPane.rowIndex="1">
+        <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <DatePicker fx:id="datePicker" GridPane.columnIndex="5" GridPane.rowIndex="1" />
+            <TextField fx:id="minPriceInput" GridPane.columnIndex="4" GridPane.rowIndex="1" />
+            <TextField fx:id="maxPriceInput" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+            <TextField fx:id="originInput" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+            <TextField fx:id="destinationInput" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <Label text="روز" GridPane.columnIndex="5" GridPane.halignment="CENTER">
+               <font>
+                  <Font name="B Nazanin" size="18.0" />
+               </font>
+            </Label>
+            <Label text="حداقل قیمت" GridPane.columnIndex="4" GridPane.halignment="CENTER">
+               <font>
+                  <Font name="B Nazanin" size="18.0" />
+               </font>
+            </Label>
+            <Label text="حداکثر قیمت" GridPane.columnIndex="3" GridPane.halignment="CENTER">
+               <font>
+                  <Font name="B Nazanin" size="18.0" />
+               </font>
+            </Label>
+            <Label text="مبدا" GridPane.columnIndex="2" GridPane.halignment="CENTER">
+               <font>
+                  <Font name="B Nazanin" size="18.0" />
+               </font>
+            </Label>
+            <Label text="مقصد" GridPane.columnIndex="1" GridPane.halignment="CENTER">
+               <font>
+                  <Font name="B Nazanin" size="18.0" />
+               </font>
+            </Label>
+            <ChoiceBox fx:id="sortChoiceBox" prefWidth="150.0" GridPane.columnIndex="5" GridPane.halignment="CENTER" GridPane.rowIndex="3" />
+            <ChoiceBox fx:id="typeChoiceBox" prefWidth="150.0" GridPane.halignment="CENTER" GridPane.rowIndex="1" />
+            <TextField fx:id="capacityInput" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+            <TextField fx:id="limitInput" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <Label text="نوع پرواز" GridPane.halignment="CENTER">
+               <font>
+                  <Font name="B Nazanin" size="18.0" />
+               </font>
+            </Label>
+            <Label text="ظرفیت" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2">
+               <font>
+                  <Font name="B Nazanin" size="18.0" />
+               </font>
+            </Label>
+            <DatePicker fx:id="secondDatePicker" GridPane.columnIndex="3" GridPane.rowIndex="3" />
+            <DatePicker fx:id="firstDatePicker" GridPane.columnIndex="4" GridPane.rowIndex="3" />
+            <Label text="تاریخ اول" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.rowIndex="2">
+               <font>
+                  <Font name="B Nazanin" size="18.0" />
+               </font>
+            </Label>
+            <Label text="تاریخ دوم" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="2">
+               <font>
+                  <Font name="B Nazanin" size="18.0" />
+               </font>
+            </Label>
+            <Label text="تعداد داده ها در خروجی" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2">
+               <font>
+                  <Font name="B Nazanin" size="17.0" />
+               </font>
+            </Label>
+            <Label text="مرتب سازی بر اساس" GridPane.columnIndex="5" GridPane.halignment="CENTER" GridPane.rowIndex="2">
+               <font>
+                  <Font name="B Nazanin" size="18.0" />
+               </font>
+            </Label>
+         </children>
+      </GridPane>
+      <GridPane GridPane.columnIndex="1" GridPane.rowIndex="2">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <Button mnemonicParsing="false" onMouseClicked="#query1Click" text="همه پروازها در روز مشخص" GridPane.columnIndex="1" GridPane.halignment="CENTER" />
+            <Button mnemonicParsing="false" onMouseClicked="#query2Click" text="همه پروازها در بازه قیمتی معین" GridPane.halignment="CENTER" />
+            <Button mnemonicParsing="false" onMouseClicked="#query4Click" text="حداقل و حداکثر قیمت پروازها از مبدأ به مقصد مشخص" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
+            <Button mnemonicParsing="false" onMouseClicked="#query3Click" text="میانگین و مجموع قیمت پروازها از مبدأ به مقصد مشخص" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
+            <Button mnemonicParsing="false" onMouseClicked="#query6Click" text="پروازها با مبدأ و مقصد مشخص در یک بازه قیمتی و تعیین ارزانترین پرواز" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2" />
+            <Button mnemonicParsing="false" onMouseClicked="#query7Click" text="پروازها با مبدأ، مقصد و ظرفیت معین" GridPane.halignment="CENTER" GridPane.rowIndex="2" />
+            <Button mnemonicParsing="false" onMouseClicked="#query9Click" text="شرکتهای هواپیمایی موجود برای پروازها از یک مبدأ به مقصد مشخص در تاریخ معین" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="3" />
+            <Button mnemonicParsing="false" onMouseClicked="#query13Click" text="نام فرودگاههای مبدأ و مقصد موجود برای پروازهایی با یک مبدأ و مقصد (کشور) وتاریخ مشخص" GridPane.halignment="CENTER" GridPane.rowIndex="3" />
+         </children>
+      </GridPane>
+      <Button mnemonicParsing="false" onMouseClicked="#returnMainMenuClick" text="بازگشت به صفحه اصلی" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="3" />
+   </children>
+</GridPane>

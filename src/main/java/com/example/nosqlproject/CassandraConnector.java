@@ -25,12 +25,15 @@ public class CassandraConnector {
     }
 
     //1
-    public List<Flight> getFlightsBySpecificDate(Date date, String classType, OrderBy orderBy){
+    public List<Flight> getFlightsBySpecificDate(Date date, String classType, OrderBy orderBy, int limit){
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         String dateFormatted = formatter.format(date);
         StringBuilder query = new StringBuilder("SELECT * FROM Flight WHERE starttime >= '" + dateFormatted + " 00:00:00' and starttime <= '" + dateFormatted + " 23:59:59"  + "'");
         if(classType != null){
             query.append(" and classType = '").append(classType).append("'");
+        }
+        if(limit != -1){
+            query.append(" limit ").append(limit);
         }
         query.append(" ALLOW FILTERING; ");
         List<Flight> flights = getFlightsByQuery(query.toString());
@@ -42,10 +45,13 @@ public class CassandraConnector {
     }
 
     //2
-    public List<Flight> getFlightsInPriceRange(double minPrice, double maxPrice, String classType, OrderBy orderBy){
+    public List<Flight> getFlightsInPriceRange(double minPrice, double maxPrice, String classType, OrderBy orderBy, int limit){
         StringBuilder query = new StringBuilder("SELECT * FROM Flight WHERE price >= " + minPrice + " and price <= " + maxPrice);
         if(classType != null){
             query.append(" and classType = '").append(classType).append("'");
+        }
+        if(limit != -1){
+            query.append(" limit ").append(limit);
         }
         query.append(" ALLOW FILTERING; ");
         List<Flight> flights = getFlightsByQuery(query.toString());
@@ -56,31 +62,29 @@ public class CassandraConnector {
     }
 
     //3
-    public void getMinMaxPrice(String origin, String destination, String classType){
+    public String getMinMaxPrice(String origin, String destination, String classType){
         StringBuilder query = new StringBuilder("SELECT min(price) as minPrice ,max(price) as maxPrice FROM Flight WHERE origin = '" + origin + "' and destination = '" + destination + "'");
         if(classType != null){
             query.append(" and classType = '").append(classType).append("'");
         }
         query.append(" ALLOW FILTERING; ");
         Row result = session.execute(query.toString()).one();
-        System.out.println(result.getDouble("minPrice"));
-        System.out.println(result.getDouble("maxPrice"));
+        return "Minimum Price : " + result.getDouble("minPrice") + "\n" + "Maximum Price : " + result.getDouble("maxPrice");
     }
 
     //4
-    public void getAvgSumPrice(String origin, String destination, String classType){
+    public String getAvgSumPrice(String origin, String destination, String classType){
         StringBuilder query = new StringBuilder("SELECT avg(price) as avgPrice ,sum(price) as sumPrice FROM Flight WHERE origin = '" + origin + "' and destination = '" + destination + "'");
         if(classType != null){
             query.append(" and classType = '").append(classType).append("'");
         }
         query.append(" ALLOW FILTERING; ");
         Row result = session.execute(query.toString()).one();
-        System.out.println(result.getDouble("avgPrice"));
-        System.out.println(result.getDouble("sumPrice"));
+        return "Average Price : " + result.getDouble("avgPrice") + "\n" + "Sum Price : " + result.getDouble("sumPrice");
     }
 
     //6
-    public Flight getCheapestFlight(String origin, String destination, double minPrice, double maxPrice, Date firstDate, Date secondDate, String classType){
+    public Flight getCheapestFlight(String origin, String destination, double minPrice, double maxPrice, Date firstDate, Date secondDate, String classType, int limit){
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         String firstDateFormatted = "";
         String secondDateFormatted = "";
@@ -103,13 +107,16 @@ public class CassandraConnector {
         if(classType != null){
             query.append(" and classType = '").append(classType).append("'");
         }
+        if(limit != -1){
+            query.append(" limit ").append(limit);
+        }
         query.append(" ALLOW FILTERING; ");
         Row result2 = session.execute(query.toString()).one();
         return parseQuery(result2);
     }
 
     //7
-    public List<Flight> getFlightsByOriginDestCap(String originAirport, String DestinationAirport, int FlightCapacity, Date firstDate, Date secondDate, String classType, OrderBy orderBy){
+    public List<Flight> getFlightsByOriginDestCap(String originAirport, String DestinationAirport, int FlightCapacity, Date firstDate, Date secondDate, String classType, OrderBy orderBy, int limit){
         StringBuilder query = new StringBuilder("SELECT * FROM Flight WHERE Origin = '" + originAirport +"' and  destination = '" + DestinationAirport + "' and capacity = " + FlightCapacity);
         if(firstDate != null && secondDate != null){
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
@@ -120,6 +127,9 @@ public class CassandraConnector {
         if(classType != null){
             query.append(" and classType = '").append(classType).append("'");
         }
+        if(limit != -1){
+            query.append(" limit ").append(limit);
+        }
         query.append(" ALLOW FILTERING; ");
         List<Flight> flights = getFlightsByQuery(query.toString());
         if(orderBy != null){
@@ -129,7 +139,7 @@ public class CassandraConnector {
     }
 
     //9
-    public List<String> getAirlineCompany(Date date, String originAirport, String destinationAirport, OrderBy orderBy){
+    public List<String> getAirlineCompany(Date date, String originAirport, String destinationAirport, OrderBy orderBy, int limit){
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         String dateFormatted = formatter.format(date);
         StringBuilder query = new StringBuilder("SELECT airlineCompany FROM Flight WHERE Origin = '" + originAirport +"' and  startTime >= '" + dateFormatted + " 00:00:00' and startTime <= '" + dateFormatted + " 23:59:59");
@@ -138,12 +148,13 @@ public class CassandraConnector {
         if(orderBy != null){
             orderFlights(flights,orderBy);
         }
+        if(limit != -1){
+            query.append(" limit ").append(limit);
+        }
         HashSet<String> airlines = new HashSet<>();
         for (Flight flight: flights) {
             List<String> flightAirlines = flight.getAirlineCompany();
-            for (String airline : flightAirlines) {
-                airlines.add(airline);
-            }
+            airlines.addAll(flightAirlines);
         }
         return new LinkedList<>(airlines);
     }

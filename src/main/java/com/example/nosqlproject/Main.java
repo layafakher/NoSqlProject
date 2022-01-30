@@ -11,11 +11,11 @@ import java.util.List;
 public class Main extends Application {
     @Override
     public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("FlightsTable.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 1026, 563);
-        List<Flight> flights = Info.getInstance().getClient().getFlightsInPriceRange(100,600,null,null);;
-        FlightsTableController flightsTableController = fxmlLoader.getController();
-        flightsTableController.setInitials(flights);
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("MainMenu.fxml"));
+        Scene scene = new Scene(fxmlLoader.load(), 600, 400);
+//        List<Flight> flights = Info.getInstance().getClient().getFlightsInPriceRange(100,600,null,null,-1);
+//        FlightsTableController flightsTableController = fxmlLoader.getController();
+//        flightsTableController.setInitials(flights);
         stage.setTitle("NoSQL Project");
         stage.setScene(scene);
         stage.show();
@@ -39,7 +39,7 @@ public class Main extends Application {
 //            e.printStackTrace();
 //        }
 //        client.getMinMaxPrice("Imam airport","Istanbul Airport",null);
-        System.out.println(client.getCheapestFlight("Imam airport","Istanbul Airport",100,500,null,null,"economy"));
+        System.out.println(client.getCheapestFlight("Imam airport","Istanbul Airport",100,500,null,null,"economy",-1));
 //        List<noSQL.Flight> flights = client.getFlightsInPriceRange(100,600);
 
 //        Session session = client.getSession();
