@@ -5,6 +5,7 @@ import javafx.stage.Stage;
 public class Info {
 
     private static Info instance;
+    private final static String flyURL = "https://sacramento.aero/smf/flight-and-travel/flight-status";
     private CassandraConnector client;
     private Stage stage;
 
@@ -33,5 +34,9 @@ public class Info {
 
     public void setStage(Stage stage) {
         this.stage = stage;
+    }
+
+    public static String getFlyURL() {
+        return flyURL;
     }
 }

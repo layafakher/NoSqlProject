@@ -10,6 +10,7 @@ module com.example.nosqlproject {
     requires org.kordamp.bootstrapfx.core;
     requires eu.hansolo.tilesfx;
     requires cassandra.driver.core;
+    requires org.jsoup;
 
     opens com.example.nosqlproject to javafx.fxml;
     exports com.example.nosqlproject;

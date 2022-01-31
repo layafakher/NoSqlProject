@@ -16,6 +16,7 @@ public class FlightView {
     private SimpleStringProperty price;
     private SimpleStringProperty airlineCompany;
     private SimpleStringProperty stops;
+    private boolean flag;
 
     public FlightView(Flight flight) {
         SimpleDateFormat formatter = new SimpleDateFormat("MM-dd HH:mm");
@@ -29,6 +30,7 @@ public class FlightView {
         price = new SimpleStringProperty(String.valueOf(flight.getPrice()));
         airlineCompany = new SimpleStringProperty(String.join(",",flight.getAirlineCompany()));
         stops = new SimpleStringProperty(String.join(",",flight.getStops()));
+        flag = flight.isFlag();
     }
 
     public String getId() {
@@ -149,5 +151,13 @@ public class FlightView {
 
     public void setStops(String stops) {
         this.stops.set(stops);
+    }
+
+    public boolean isFlag() {
+        return flag;
+    }
+
+    public void setFlag(boolean flag) {
+        this.flag = flag;
     }
 }

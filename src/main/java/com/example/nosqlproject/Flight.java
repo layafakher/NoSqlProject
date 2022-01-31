@@ -20,8 +20,10 @@ public class Flight {
     private double price;
     private List<String> airlineCompany;
     private List<String> stops;
+    private boolean flag;
 
     public Flight() {
+        flag = false;
     }
 
     public Flight(int flightId, String origin, String originCity, String originCountry, String destination, String destinationCity, String destinationCountry, String classType, Date startTime, Date finishTime, double duration, int capacity, List<String> airlineCompany, List<String> stops, double price) {
@@ -160,6 +162,14 @@ public class Flight {
 
     public void setPrice(double price) {
         this.price = price;
+    }
+
+    public boolean isFlag() {
+        return flag;
+    }
+
+    public void setFlag(boolean flag) {
+        this.flag = flag;
     }
 
     @Override

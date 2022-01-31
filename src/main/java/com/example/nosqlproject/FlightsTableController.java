@@ -1,11 +1,14 @@
 package com.example.nosqlproject;
 
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
@@ -51,6 +54,18 @@ public class FlightsTableController {
         priceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
         airlinesColumn.setCellValueFactory(new PropertyValueFactory<>("airlineCompany"));
         stopsColumn.setCellValueFactory(new PropertyValueFactory<>("stops"));
+        flightsTable.setRowFactory(tv -> new TableRow<>() {
+            @Override
+            protected void updateItem(FlightView item, boolean empty) {
+                super.updateItem(item, empty);
+                if (item == null || !item.isFlag())
+                    setStyle("");
+                else if (item.isFlag())
+                    setStyle("-fx-background-color: #ff9e3f;");
+                else
+                    setStyle("");
+            }
+        });
     }
 
     private void setDate(){

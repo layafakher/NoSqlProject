@@ -5,7 +5,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.input.MouseEvent;
 
 import java.time.ZoneId;
 import java.util.Arrays;
@@ -37,7 +36,12 @@ public class ShowDataMenuController {
     @FXML
     private TextField limitInput;
 
-    public void query1Click(MouseEvent event) {
+    public void getAllFlightsClick(){
+        List<Flight> flights = Info.getInstance().getClient().getAllFlights();
+        showTable(flights);
+    }
+
+    public void query1Click() {
         if(datePicker.getValue() != null){
             Date date = Date.from(datePicker.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
             List<Flight> flights = Info.getInstance().getClient().getFlightsBySpecificDate(date,getType(),getOrderBy(),getLimit());
@@ -49,7 +53,7 @@ public class ShowDataMenuController {
         }
     }
 
-    public void query2Click(MouseEvent event) {
+    public void query2Click() {
         if(!minPriceInput.getText().isEmpty() && !maxPriceInput.getText().isEmpty()){
             List<Flight> flights = Info.getInstance().getClient().getFlightsInPriceRange(Double.parseDouble(minPriceInput.getText()),Double.parseDouble(maxPriceInput.getText()),getType(),getOrderBy(),getLimit());
             showTable(flights);
@@ -60,7 +64,7 @@ public class ShowDataMenuController {
         }
     }
 
-    public void query3Click(MouseEvent event) {
+    public void query3Click() {
         if(!originInput.getText().isEmpty() && !destinationInput.getText().isEmpty()){
             String result = Info.getInstance().getClient().getMinMaxPrice(originInput.getText(),destinationInput.getText(),getType());
             showTextArea(result);
@@ -71,7 +75,7 @@ public class ShowDataMenuController {
         }
     }
 
-    public void query4Click(MouseEvent event) {
+    public void query4Click() {
         if(!originInput.getText().isEmpty() && !destinationInput.getText().isEmpty()){
             String result = Info.getInstance().getClient().getAvgSumPrice(originInput.getText(),destinationInput.getText(),getType());
             showTextArea(result);
@@ -82,15 +86,57 @@ public class ShowDataMenuController {
         }
     }
 
-    public void query6Click(MouseEvent event) {
+    public void query6Click() {
+        if(!originInput.getText().isEmpty() && !destinationInput.getText().isEmpty() && !minPriceInput.getText().isEmpty() && !maxPriceInput.getText().isEmpty()){
+            List<Flight> flights = Info.getInstance().getClient().getCheapestFlight(originInput.getText(),destinationInput.getText(),Double.parseDouble(minPriceInput.getText()),Double.parseDouble(maxPriceInput.getText()),getFirstDate(),getSecondDate(),getType(),getOrderBy(),getLimit());
+            showTable(flights);
+        }
+        else{
+            Alert alert = new Alert(Alert.AlertType.ERROR,"Please fill the required fields", ButtonType.OK);
+            alert.show();
+        }
     }
-    public void query7Click(MouseEvent event) {
+
+    public void query7Click() {
+        if(!originInput.getText().isEmpty() && !destinationInput.getText().isEmpty() && !capacityInput.getText().isEmpty()){
+            List<Flight> flights = Info.getInstance().getClient().getFlightsByOriginDestCap(originInput.getText(),destinationInput.getText(),Integer.parseInt(capacityInput.getText()),getFirstDate(),getSecondDate(),getType(),getOrderBy(),getLimit());
+            showTable(flights);
+        }
+        else{
+            Alert alert = new Alert(Alert.AlertType.ERROR,"Please fill the required fields", ButtonType.OK);
+            alert.show();
+        }
     }
-    public void query9Click(MouseEvent event) {
+
+    public void query9Click() {
+        if(!originInput.getText().isEmpty() && !destinationInput.getText().isEmpty() && datePicker.getValue() != null){
+            Date date = Date.from(datePicker.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
+            List<String> airlines = Info.getInstance().getClient().getAirlineCompany(date,originInput.getText(),destinationInput.getText(),getOrderBy(),getLimit());
+            StringBuilder result = new StringBuilder();
+            for (String airline : airlines) {
+                result.append(airline);
+            }
+            showTextArea(result.toString());
+        }
+        else{
+            Alert alert = new Alert(Alert.AlertType.ERROR,"Please fill the required fields", ButtonType.OK);
+            alert.show();
+        }
     }
-    public void query13Click(MouseEvent event) {
+
+    public void query13Click() {
+        if(!originInput.getText().isEmpty() && !destinationInput.getText().isEmpty() && datePicker.getValue() != null){
+            Date date = Date.from(datePicker.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
+            String result = Info.getInstance().getClient().airportsName(date,originInput.getText(),destinationInput.getText());
+            showTextArea(result);
+        }
+        else{
+            Alert alert = new Alert(Alert.AlertType.ERROR,"Please fill the required fields", ButtonType.OK);
+            alert.show();
+        }
     }
-    public void returnMainMenuClick(MouseEvent event) {
+
+    public void returnMainMenuClick() {
         try{
             FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("MainMenu.fxml"));
             Scene scene = new Scene(fxmlLoader.load(), 600, 400);
@@ -120,13 +166,31 @@ public class ShowDataMenuController {
 
     private int getLimit(){
         try{
-            if(!limitInput.getText().isEmpty()){
+            if(!limitInput.getText().isEmpty() && Integer.parseInt(limitInput.getText()) > 0){
                 return Integer.parseInt(limitInput.getText());
             }
         } catch (Exception e){
             return -1;
         }
         return -1;
+    }
+
+    private Date getFirstDate(){
+        if(firstDatePicker.getValue() != null){
+            return Date.from(firstDatePicker.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
+        }
+        else{
+            return null;
+        }
+    }
+
+    private Date getSecondDate(){
+        if(secondDatePicker.getValue() != null){
+            return Date.from(secondDatePicker.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
+        }
+        else{
+            return null;
+        }
     }
 
     private String getType(){
